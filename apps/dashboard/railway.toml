@@ -3,6 +3,9 @@ builder = "NIXPACKS"
 buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter dashboard"
 watchPatterns = ["apps/dashboard/**", "packages/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
+[build.env]
+NIXPACKS_NODE_VERSION = "20"
+
 [deploy]
 startCommand = "pnpm --filter dashboard start"
 restartPolicyType = "ON_FAILURE"
