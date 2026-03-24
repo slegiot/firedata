@@ -98,10 +98,7 @@ services:
       DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
-      YAHOO_FINANCE_PROXY_URL: ${YAHOO_FINANCE_PROXY_URL:-}
-      ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY:-}
-      POLYGON_API_KEY: ${POLYGON_API_KEY:-}
-      COINGECKO_API_KEY: ${COINGECKO_API_KEY:-}
+      FINANCE_SCRAPE_TARGETS: ${FINANCE_SCRAPE_TARGETS:-}
 
   news-service:
     <<: *service-base
@@ -111,8 +108,7 @@ services:
       DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
-      NEWSAPI_KEY: ${NEWSAPI_KEY:-}
-      GNEWS_API_KEY: ${GNEWS_API_KEY:-}
+      NEWS_SCRAPE_TARGETS: ${NEWS_SCRAPE_TARGETS:-}
       NEWS_RSS_SOURCES: ${NEWS_RSS_SOURCES:-}
 
   sports-service:
@@ -123,9 +119,7 @@ services:
       DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
-      API_FOOTBALL_KEY: ${API_FOOTBALL_KEY:-}
-      CRICKET_DATA_KEY: ${CRICKET_DATA_KEY:-}
-      SPORTS_DATA_SOURCES: ${SPORTS_DATA_SOURCES:-}
+      SPORTS_SCRAPE_TARGETS: ${SPORTS_SCRAPE_TARGETS:-}
 
   betting-odds-service:
     <<: *service-base
@@ -135,8 +129,8 @@ services:
       DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
-      THE_ODDS_API_KEY: ${THE_ODDS_API_KEY:-}
-      ODDSJAM_API_KEY: ${ODDSJAM_API_KEY:-}
+      BETTING_SCRAPE_TARGETS: ${BETTING_SCRAPE_TARGETS:-}
+      BETTING_PROXY_URL: ${BETTING_PROXY_URL:-}
 
 volumes:
   pgdata:

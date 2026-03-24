@@ -1,6 +1,6 @@
 {
   "name": "@firedata/shared-firecrawl-client",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -8,10 +8,13 @@
     "build": "tsc --build",
     "dev": "tsc --build --watch",
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@types/node": "^22.12.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.4"
   }
 }
