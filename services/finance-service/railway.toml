@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm install --frozen-lockfile && pnpm run build --filter @firedata/finance-service"
+buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/finance-service"
 watchPatterns = ["packages/**", "services/finance-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
