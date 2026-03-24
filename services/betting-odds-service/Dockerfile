@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:20-alpine
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 WORKDIR /app
 
@@ -6,11 +6,14 @@ WORKDIR /app
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json tsconfig.base.json ./
 
 # Copy all packages and this service
-COPY packages packages
-COPY services/betting-odds-service services/betting-odds-service
+COPY packages/ packages/
+COPY services/betting-odds-service/ services/betting-odds-service/
 
-# Install all deps
+# Install all deps (including dev for build)
 RUN pnpm install --frozen-lockfile
 
+# Build the service + its workspace dependencies
+RUN pnpm turbo build --filter=@firedata/betting-odds-service
+
 EXPOSE 3004
-CMD ["pnpm", "--filter", "@firedata/betting-odds-service", "exec", "tsx", "src/server.ts"]
+CMD ["node", "services/betting-odds-service/dist/server.js"]

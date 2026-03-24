@@ -5,15 +5,17 @@ WORKDIR /app
 # Copy workspace config
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json tsconfig.base.json ./
 
-# Copy all packages and this service
-COPY packages/ packages/
-COPY services/api-gateway/ services/api-gateway/
+# Copy the dashboard app
+COPY apps/dashboard/ apps/dashboard/
 
 # Install all deps (including dev for build)
 RUN pnpm install --frozen-lockfile
 
-# Build the service + its workspace dependencies
-RUN pnpm turbo build --filter=@firedata/api-gateway
+# Build the dashboard
+RUN pnpm turbo build --filter=dashboard
+
+# Install serve for static file serving
+RUN npm install -g serve
 
 EXPOSE 3000
-CMD ["node", "services/api-gateway/dist/server.js"]
+CMD ["serve", "-s", "apps/dashboard/dist", "-p", "3000"]

@@ -1,10 +1,9 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/finance-service"
+builder = "DOCKERFILE"
+dockerfilePath = "services/finance-service/Dockerfile"
 watchPatterns = ["packages/**", "services/finance-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
-startCommand = "node services/finance-service/dist/server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"

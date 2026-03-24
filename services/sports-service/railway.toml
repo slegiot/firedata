@@ -1,10 +1,9 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/sports-service"
+builder = "DOCKERFILE"
+dockerfilePath = "services/sports-service/Dockerfile"
 watchPatterns = ["packages/**", "services/sports-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
-startCommand = "node services/sports-service/dist/server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"

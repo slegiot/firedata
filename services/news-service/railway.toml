@@ -1,10 +1,9 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/news-service"
+builder = "DOCKERFILE"
+dockerfilePath = "services/news-service/Dockerfile"
 watchPatterns = ["packages/**", "services/news-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
-startCommand = "node services/news-service/dist/server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"

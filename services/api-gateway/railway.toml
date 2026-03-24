@@ -1,10 +1,9 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/api-gateway"
+builder = "DOCKERFILE"
+dockerfilePath = "services/api-gateway/Dockerfile"
 watchPatterns = ["packages/**", "services/api-gateway/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
-startCommand = "node services/api-gateway/dist/server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"

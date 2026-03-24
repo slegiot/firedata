@@ -1,10 +1,9 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "NODE_ENV=development pnpm install --frozen-lockfile && pnpm run build --filter @firedata/betting-odds-service"
+builder = "DOCKERFILE"
+dockerfilePath = "services/betting-odds-service/Dockerfile"
 watchPatterns = ["packages/**", "services/betting-odds-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
-startCommand = "node services/betting-odds-service/dist/server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"
