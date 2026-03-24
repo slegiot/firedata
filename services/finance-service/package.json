@@ -1,0 +1,23 @@
+{
+  "name": "@firedata/finance-service",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fastify": "^5.2.1",
+    "@firedata/shared-types": "workspace:*",
+    "@firedata/shared-cache": "workspace:*",
+    "@firedata/shared-db": "workspace:*",
+    "@firedata/shared-firecrawl-client": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

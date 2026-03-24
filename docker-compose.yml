@@ -1,0 +1,147 @@
+# ─── FireData · Local Development Stack ────────────────────────
+#
+# Usage:
+#   cp .env.example .env          # fill in values
+#   docker compose up --build     # start everything
+#   docker compose up redis postgres  # infra only (run services natively)
+#
+# Hot-reload: source code is volume-mounted into every service
+# container, so tsx watch detects changes from your host editor.
+# ────────────────────────────────────────────────────────────────
+
+name: firedata
+
+x-service-base: &service-base
+  build:
+    context: .
+    dockerfile: Dockerfile.dev
+  volumes:
+    - ./packages:/app/packages
+    - ./services:/app/services
+    - ./tsconfig.base.json:/app/tsconfig.base.json
+  env_file: .env
+  restart: unless-stopped
+  networks:
+    - firedata-net
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  # ── Infrastructure ───────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-firedata}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-firedata}
+      POSTGRES_DB: ${POSTGRES_DB:-firedata}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-firedata}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - firedata-net
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - firedata-net
+
+  firecrawl-api:
+    image: mendableai/firecrawl:latest
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+    networks:
+      - firedata-net
+
+  # ── Application Services ─────────────────────────────────────
+
+  api-gateway:
+    <<: *service-base
+    command: ["npx", "tsx", "watch", "services/api-gateway/src/server.ts"]
+    ports:
+      - "${API_GATEWAY_PORT:-8080}:${API_GATEWAY_INTERNAL_PORT:-3000}"
+    environment:
+      API_GATEWAY_PORT: ${API_GATEWAY_INTERNAL_PORT:-3000}
+      DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
+      FINANCE_SERVICE_URL: http://finance-service:3001
+      NEWS_SERVICE_URL: http://news-service:3002
+      SPORTS_SERVICE_URL: http://sports-service:3003
+      BETTING_ODDS_SERVICE_URL: http://betting-odds-service:3004
+
+  finance-service:
+    <<: *service-base
+    command: ["npx", "tsx", "watch", "services/finance-service/src/server.ts"]
+    environment:
+      FINANCE_SERVICE_PORT: 3001
+      DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
+      YAHOO_FINANCE_PROXY_URL: ${YAHOO_FINANCE_PROXY_URL:-}
+      ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY:-}
+      POLYGON_API_KEY: ${POLYGON_API_KEY:-}
+      COINGECKO_API_KEY: ${COINGECKO_API_KEY:-}
+
+  news-service:
+    <<: *service-base
+    command: ["npx", "tsx", "watch", "services/news-service/src/server.ts"]
+    environment:
+      NEWS_SERVICE_PORT: 3002
+      DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
+      NEWSAPI_KEY: ${NEWSAPI_KEY:-}
+      GNEWS_API_KEY: ${GNEWS_API_KEY:-}
+      NEWS_RSS_SOURCES: ${NEWS_RSS_SOURCES:-}
+
+  sports-service:
+    <<: *service-base
+    command: ["npx", "tsx", "watch", "services/sports-service/src/server.ts"]
+    environment:
+      SPORTS_SERVICE_PORT: 3003
+      DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
+      API_FOOTBALL_KEY: ${API_FOOTBALL_KEY:-}
+      CRICKET_DATA_KEY: ${CRICKET_DATA_KEY:-}
+      SPORTS_DATA_SOURCES: ${SPORTS_DATA_SOURCES:-}
+
+  betting-odds-service:
+    <<: *service-base
+    command: ["npx", "tsx", "watch", "services/betting-odds-service/src/server.ts"]
+    environment:
+      BETTING_ODDS_SERVICE_PORT: 3004
+      DATABASE_URL: ${POSTGRES_URL:-postgres://firedata:firedata@postgres:5432/firedata}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      FIRECRAWL_BASE_URL: ${FIRECRAWL_BASE_URL:-http://firecrawl-api:3002}
+      THE_ODDS_API_KEY: ${THE_ODDS_API_KEY:-}
+      ODDSJAM_API_KEY: ${ODDSJAM_API_KEY:-}
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  firedata-net:
+    driver: bridge

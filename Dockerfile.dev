@@ -1,0 +1,32 @@
+# ─── Dev Dockerfile (shared by all services) ───────────────────
+# Used by docker-compose.yml with per-service command overrides.
+# Source code is volume-mounted for hot-reload via tsx watch.
+
+FROM node:20-alpine
+
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+
+WORKDIR /app
+
+# ── 1. Copy manifests for dependency resolution ──
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+
+COPY packages/shared-types/package.json      packages/shared-types/
+COPY packages/shared-db/package.json         packages/shared-db/
+COPY packages/shared-cache/package.json      packages/shared-cache/
+COPY packages/shared-firecrawl-client/package.json packages/shared-firecrawl-client/
+
+COPY services/api-gateway/package.json       services/api-gateway/
+COPY services/finance-service/package.json   services/finance-service/
+COPY services/news-service/package.json      services/news-service/
+COPY services/sports-service/package.json    services/sports-service/
+COPY services/betting-odds-service/package.json services/betting-odds-service/
+
+# ── 2. Install all workspace dependencies ──
+RUN pnpm install --frozen-lockfile
+
+# Source code is NOT copied — it is volume-mounted by docker-compose
+# so that tsx watch can detect file changes on the host.
+
+# Default command (overridden per service in docker-compose.yml)
+CMD ["echo", "No command specified — use docker-compose to start a service"]

@@ -1,0 +1,22 @@
+{
+  "name": "@firedata/shared-db",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "pg": "^8.13.1",
+    "drizzle-orm": "^0.38.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "drizzle-kit": "^0.30.1",
+    "typescript": "^5.7.2"
+  }
+}
