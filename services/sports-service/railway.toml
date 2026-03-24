@@ -1,0 +1,10 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "services/sports-service/Dockerfile"
+
+[deploy]
+startCommand = "node services/sports-service/dist/server.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
