@@ -171,6 +171,23 @@ export interface OddsSnapshotTable {
 }
 
 // ══════════════════════════════════════════════════════════════
+// 5. API KEYS
+// ══════════════════════════════════════════════════════════════
+
+export interface ApiKeyTable {
+  id: Generated<string>;
+  key_hash: string;
+  key_prefix: string;          // First 8 chars for display (e.g., 'fd_live_Ab')
+  owner: string;               // Label (e.g., 'my-app', 'dashboard')
+  rate_limit: number;          // Requests per window
+  rate_window_ms: number;      // Window duration in ms
+  is_active: ColumnType<boolean, boolean | undefined, boolean>;
+  usage_count: ColumnType<number, number | undefined, number>;
+  last_used_at: ColumnType<Date | null, Date | string | undefined | null, Date | string | null>;
+  created_at: Timestamp;
+}
+
+// ══════════════════════════════════════════════════════════════
 // DATABASE INTERFACE
 // ══════════════════════════════════════════════════════════════
 
@@ -196,6 +213,9 @@ export interface Database {
   bookmakers: BookmakerTable;
   markets: MarketTable;
   odds_snapshots: OddsSnapshotTable;
+
+  // API Keys
+  api_keys: ApiKeyTable;
 }
 
 // ── Convenience type aliases ────────────────────────────────────
@@ -233,3 +253,7 @@ export type Market = Selectable<MarketTable>;
 export type NewMarket = Insertable<MarketTable>;
 export type OddsSnapshot = Selectable<OddsSnapshotTable>;
 export type NewOddsSnapshot = Insertable<OddsSnapshotTable>;
+
+export type ApiKey = Selectable<ApiKeyTable>;
+export type NewApiKey = Insertable<ApiKeyTable>;
+export type ApiKeyUpdate = Updateable<ApiKeyTable>;
