@@ -2,6 +2,7 @@ FROM node:22-alpine AS base
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 WORKDIR /app
 
+# Install deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
 COPY packages/shared-types/package.json packages/shared-types/package.json
 COPY packages/shared-cache/package.json packages/shared-cache/package.json
@@ -10,12 +11,18 @@ COPY packages/shared-firecrawl-client/package.json packages/shared-firecrawl-cli
 COPY services/finance-service/package.json services/finance-service/package.json
 RUN pnpm install --frozen-lockfile
 
+# Build
 COPY tsconfig.base.json ./
-COPY packages packages
+COPY packages/shared-types packages/shared-types
+COPY packages/shared-cache packages/shared-cache
+COPY packages/shared-db packages/shared-db
+COPY packages/shared-firecrawl-client packages/shared-firecrawl-client
 COPY services/finance-service services/finance-service
-RUN pnpm turbo build --filter=@firedata/finance-service
+RUN pnpm turbo build --filter=@firedata/finance-service...
 
+# Run
 FROM node:22-alpine
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 WORKDIR /app
 COPY --from=base /app /app
 EXPOSE 3001
