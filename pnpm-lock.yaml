@@ -68,6 +68,25 @@ importers:
         specifier: ^3.0.4
         version: 3.2.4(@types/node@22.19.15)(tsx@4.21.0)
 
+  packages/shared-logging:
+    dependencies:
+      fastify:
+        specifier: ^5.2.1
+        version: 5.8.4
+      pino:
+        specifier: ^9.6.0
+        version: 9.14.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.15
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.4
+        version: 3.2.4(@types/node@22.19.15)(tsx@4.21.0)
+
   packages/shared-types:
     devDependencies:
       typescript:
@@ -82,6 +101,9 @@ importers:
       '@firedata/shared-db':
         specifier: workspace:*
         version: link:../../packages/shared-db
+      '@firedata/shared-logging':
+        specifier: workspace:*
+        version: link:../../packages/shared-logging
       '@firedata/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -110,6 +132,9 @@ importers:
       '@firedata/shared-firecrawl-client':
         specifier: workspace:*
         version: link:../../packages/shared-firecrawl-client
+      '@firedata/shared-logging':
+        specifier: workspace:*
+        version: link:../../packages/shared-logging
       '@firedata/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -138,6 +163,9 @@ importers:
       '@firedata/shared-firecrawl-client':
         specifier: workspace:*
         version: link:../../packages/shared-firecrawl-client
+      '@firedata/shared-logging':
+        specifier: workspace:*
+        version: link:../../packages/shared-logging
       '@firedata/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -166,6 +194,9 @@ importers:
       '@firedata/shared-firecrawl-client':
         specifier: workspace:*
         version: link:../../packages/shared-firecrawl-client
+      '@firedata/shared-logging':
+        specifier: workspace:*
+        version: link:../../packages/shared-logging
       '@firedata/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -197,6 +228,9 @@ importers:
       '@firedata/shared-firecrawl-client':
         specifier: workspace:*
         version: link:../../packages/shared-firecrawl-client
+      '@firedata/shared-logging':
+        specifier: workspace:*
+        version: link:../../packages/shared-logging
       '@firedata/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
@@ -1187,14 +1221,14 @@ packages:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
-  pino-abstract-transport@3.0.0:
-    resolution: {integrity: sha512-wlfUczU+n7Hy/Ha5j9a/gZNy7We5+cXp8YL+X+PG8S0KXxw7n/JXA3c46Y0zQznIJ83URJiwy7Lh56WLokNuxg==}
+  pino-abstract-transport@2.0.0:
+    resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
 
   pino-std-serializers@7.1.0:
     resolution: {integrity: sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==}
 
-  pino@10.3.1:
-    resolution: {integrity: sha512-r34yH/GlQpKZbU1BvFFqOjhISRo1MNx1tWYsYvmj6KIRHSPMT2+yHOEb1SG6NMvRoHRF0a07kCOox/9yakl1vg==}
+  pino@9.14.0:
+    resolution: {integrity: sha512-8OEwKp5juEvb/MjpIc4hjqfgCNysrS94RIOMXYvpYCdm/jglrKEiAYmiumbmGhCvs+IcInsphYDFwqrjr7398w==}
     hasBin: true
 
   postcss@8.5.8:
@@ -1360,9 +1394,8 @@ packages:
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
 
-  thread-stream@4.0.0:
-    resolution: {integrity: sha512-4iMVL6HAINXWf1ZKZjIPcz5wYaOdPhtO8ATvZ+Xqp3BTdaqtAwQkNmKORqcIo5YkQqGXq5cwfswDwMqqQNrpJA==}
-    engines: {node: '>=20'}
+  thread-stream@3.1.0:
+    resolution: {integrity: sha512-OqyPZ9u96VohAyMfJykzmivOrY2wfMSf3C5TtFJVgN+Hm6aj+voFhlK+kZEIv2FBh1X6Xp3DlnCOfEQ3B2J86A==}
 
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
@@ -2196,7 +2229,7 @@ snapshots:
       fast-json-stringify: 6.3.0
       find-my-way: 9.5.0
       light-my-request: 6.6.0
-      pino: 10.3.1
+      pino: 9.14.0
       process-warning: 5.0.0
       rfdc: 1.4.1
       secure-json-parse: 4.1.0
@@ -2449,25 +2482,25 @@ snapshots:
 
   picomatch@4.0.4: {}
 
-  pino-abstract-transport@3.0.0:
+  pino-abstract-transport@2.0.0:
     dependencies:
       split2: 4.2.0
 
   pino-std-serializers@7.1.0: {}
 
-  pino@10.3.1:
+  pino@9.14.0:
     dependencies:
       '@pinojs/redact': 0.4.0
       atomic-sleep: 1.0.0
       on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 3.0.0
+      pino-abstract-transport: 2.0.0
       pino-std-serializers: 7.1.0
       process-warning: 5.0.0
       quick-format-unescaped: 4.0.4
       real-require: 0.2.0
       safe-stable-stringify: 2.5.0
       sonic-boom: 4.2.1
-      thread-stream: 4.0.0
+      thread-stream: 3.1.0
 
   postcss@8.5.8:
     dependencies:
@@ -2610,7 +2643,7 @@ snapshots:
 
   text-table@0.2.0: {}
 
-  thread-stream@4.0.0:
+  thread-stream@3.1.0:
     dependencies:
       real-require: 0.2.0
 

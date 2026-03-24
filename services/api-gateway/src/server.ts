@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import type { HealthResponse } from '@firedata/shared-types';
 import { createDbFromEnv, destroyDb } from '@firedata/shared-db';
 import { CacheClient, RateLimiter } from '@firedata/shared-cache';
+import { createLogger, createServiceMetrics, instrumentFastify } from '@firedata/shared-logging';
 import { createAuthMiddleware, createRateLimitMiddleware } from './middleware/index.js';
 import { getServiceUrls } from './proxy.js';
 import {
@@ -16,7 +17,12 @@ const PORT = Number(process.env.PORT || process.env.API_GATEWAY_PORT) || 3000;
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const startTime = Date.now();
 
-const app = Fastify({ logger: true });
+const logger = createLogger({ service: SERVICE_NAME });
+const metrics = createServiceMetrics(SERVICE_NAME);
+
+const app = Fastify({ logger: false });
+
+instrumentFastify(app, logger, metrics);
 
 // ── Health check (no auth required) ───────────────────────────
 
@@ -43,7 +49,6 @@ async function start() {
     const rateLimitMw = createRateLimitMiddleware(rateLimiter);
 
     app.addHook('onRequest', async (request, reply) => {
-      // Skip auth for health/non-v1 routes
       if (!request.url.startsWith('/v1/')) return;
 
       await authMiddleware(request, reply);
@@ -58,14 +63,12 @@ async function start() {
     await registerSportsRoutes(app, serviceUrls);
     await registerOddsRoutes(app, serviceUrls);
 
-    // Start HTTP server
     await app.listen({ port: PORT, host: '0.0.0.0' });
-    app.log.info(`${SERVICE_NAME} listening on port ${PORT}`);
-    app.log.info(`Service URLs: ${JSON.stringify(serviceUrls)}`);
+    logger.info(`${SERVICE_NAME} listening on port ${PORT}`);
+    logger.info({ serviceUrls }, 'Service URLs configured');
 
-    // Graceful shutdown
     const shutdown = async () => {
-      app.log.info('Shutting down...');
+      logger.info('Shutting down...');
       await app.close();
       await cache.disconnect();
       await destroyDb();
@@ -75,7 +78,7 @@ async function start() {
     process.on('SIGTERM', shutdown);
     process.on('SIGINT', shutdown);
   } catch (err) {
-    app.log.error(err);
+    logger.error(err, 'Failed to start');
     process.exit(1);
   }
 }

@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import type { HealthResponse } from '@firedata/shared-types';
 import { createDbFromEnv, destroyDb } from '@firedata/shared-db';
 import { FirecrawlClient } from '@firedata/shared-firecrawl-client';
+import { createLogger, createServiceMetrics, instrumentFastify } from '@firedata/shared-logging';
 import { registerRoutes } from './routes.js';
 import { SourceRegistry, YahooFinanceSource, GoogleFinanceSource } from './sources/index.js';
 import { startScheduler, stopScheduler } from './worker/index.js';
@@ -11,7 +12,13 @@ const PORT = Number(process.env.PORT || process.env.FINANCE_SERVICE_PORT) || 300
 const INGESTION_INTERVAL = Number(process.env.INGESTION_INTERVAL_MS) || 300_000;
 const startTime = Date.now();
 
-const app = Fastify({ logger: true });
+const logger = createLogger({ service: SERVICE_NAME });
+const metrics = createServiceMetrics(SERVICE_NAME);
+
+const app = Fastify({ logger: false });
+
+// Attach observability (correlation IDs, metrics, /metrics endpoint)
+instrumentFastify(app, logger, metrics);
 
 // ── Health check ──────────────────────────────────────────────
 
@@ -28,10 +35,7 @@ app.get<{ Reply: HealthResponse }>('/health', async (_req, reply) => {
 
 async function start() {
   try {
-    // Initialise database
     const db = createDbFromEnv();
-
-    // Initialise Firecrawl client
     const firecrawl = FirecrawlClient.fromEnv();
 
     // Register price sources
@@ -39,7 +43,7 @@ async function start() {
     registry.register(new YahooFinanceSource(firecrawl));
     registry.register(new GoogleFinanceSource(firecrawl));
 
-    app.log.info(
+    logger.info(
       `Registered ${registry.getSourceNames().length} price sources: ${registry.getSourceNames().join(', ')}`,
     );
 
@@ -49,13 +53,11 @@ async function start() {
     // Start ingestion scheduler
     startScheduler(db, registry, INGESTION_INTERVAL);
 
-    // Start HTTP server
     await app.listen({ port: PORT, host: '0.0.0.0' });
-    app.log.info(`${SERVICE_NAME} listening on port ${PORT}`);
+    logger.info(`${SERVICE_NAME} listening on port ${PORT}`);
 
-    // Graceful shutdown
     const shutdown = async () => {
-      app.log.info('Shutting down...');
+      logger.info('Shutting down...');
       stopScheduler();
       await app.close();
       await destroyDb();
@@ -65,7 +67,7 @@ async function start() {
     process.on('SIGTERM', shutdown);
     process.on('SIGINT', shutdown);
   } catch (err) {
-    app.log.error(err);
+    logger.error(err, 'Failed to start');
     process.exit(1);
   }
 }

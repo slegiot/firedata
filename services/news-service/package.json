@@ -17,7 +17,8 @@
     "@firedata/shared-types": "workspace:*",
     "@firedata/shared-cache": "workspace:*",
     "@firedata/shared-db": "workspace:*",
-    "@firedata/shared-firecrawl-client": "workspace:*"
+    "@firedata/shared-firecrawl-client": "workspace:*",
+    "@firedata/shared-logging": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.19.2",
