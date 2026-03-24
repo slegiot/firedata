@@ -87,7 +87,7 @@ export async function registerFinanceRoutes(
       symbol: request.query.symbol,
       asset_type: request.query.asset_type,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'finance-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'finance-service', res.cached));
   });
 
   app.get<{
@@ -128,7 +128,7 @@ export async function registerFinanceRoutes(
       symbol: request.query.symbol,
       asset_id: request.query.asset_id,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'finance-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'finance-service', res.cached));
   });
 
   app.get<{
@@ -167,7 +167,7 @@ export async function registerFinanceRoutes(
       from: request.query.from,
       to: request.query.to,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'finance-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'finance-service', res.cached));
   });
 }
 
@@ -216,7 +216,7 @@ export async function registerNewsRoutes(
       limit: request.query.limit,
       cursor: request.query.cursor,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'news-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'news-service', res.cached));
   });
 
   app.get<{
@@ -250,7 +250,7 @@ export async function registerNewsRoutes(
     }
   }, async (request, reply) => {
     const res = await proxyGet(urls.news, `/v1/news/${request.params.id}`);
-    return reply.status(res.status).send(wrapResponse(res.data, 'news-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'news-service', res.cached));
   });
 }
 
@@ -281,7 +281,7 @@ export async function registerSportsRoutes(
     }
   }, async (_request, reply) => {
     const res = await proxyGet(urls.sports, '/v1/sports/sports');
-    return reply.status(res.status).send(wrapResponse(res.data, 'sports-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'sports-service', res.cached));
   });
 
   app.get<{
@@ -317,7 +317,7 @@ export async function registerSportsRoutes(
     const res = await proxyGet(urls.sports, '/v1/sports/leagues', {
       sport_key: request.query.sport_key,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'sports-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'sports-service', res.cached));
   });
 
   app.get<{
@@ -358,7 +358,7 @@ export async function registerSportsRoutes(
     const { league_id, status, limit } = request.query;
     const path = league_id ? `/v1/sports/leagues/${league_id}/games` : '/v1/sports/games';
     const res = await proxyGet(urls.sports, path, { status, limit });
-    return reply.status(res.status).send(wrapResponse(res.data, 'sports-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'sports-service', res.cached));
   });
 }
 
@@ -410,7 +410,7 @@ export async function registerOddsRoutes(
     const res = await proxyGet(urls.odds, `/v1/odds/games/${request.params.game_id}`, {
       market: request.query.market,
     });
-    return reply.status(res.status).send(wrapResponse(res.data, 'betting-odds-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'betting-odds-service', res.cached));
   });
 
   app.get('/v1/odds/bookmakers', {
@@ -435,6 +435,6 @@ export async function registerOddsRoutes(
     }
   }, async (_request, reply) => {
     const res = await proxyGet(urls.odds, '/v1/odds/bookmakers');
-    return reply.status(res.status).send(wrapResponse(res.data, 'betting-odds-service', res.cached));
+    return reply.status(res.status as any).send(wrapResponse(res.data, 'betting-odds-service', res.cached));
   });
 }

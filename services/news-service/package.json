@@ -18,10 +18,10 @@
     "@firedata/shared-cache": "workspace:*",
     "@firedata/shared-db": "workspace:*",
     "@firedata/shared-firecrawl-client": "workspace:*",
-    "@firedata/shared-logging": "workspace:*"
+    "@firedata/shared-logging": "workspace:*",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^3.0.4"
   }

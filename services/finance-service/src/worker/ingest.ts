@@ -4,7 +4,7 @@
  * Reads tracked assets from the DB, fetches prices from all
  * registered sources, resolves conflicts, and inserts snapshots.
  */
-import type { FireDataDb } from '@firedata/shared-db';
+import type { FireDataDb, Asset } from '@firedata/shared-db';
 import { insertPriceSnapshot } from '@firedata/shared-db';
 import type { SourceRegistry } from '../sources/index.js';
 
@@ -48,7 +48,7 @@ export async function runIngestion(
     const batch = assets.slice(i, i + BATCH_SIZE);
 
     await Promise.all(
-      batch.map(async (asset) => {
+      batch.map(async (asset: Asset) => {
         try {
           // Fetch from all sources and store every result
           const snapshots = await registry.fetchAll(asset);

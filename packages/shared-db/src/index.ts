@@ -1,10 +1,11 @@
-// ─── Database client ────────────────────────────────────────
 export { createDb, createDbFromEnv, destroyDb } from './db.js';
 export type { DbConfig, FireDataDb } from './db.js';
+export type { ExpressionBuilder } from 'kysely';
 
 // ─── Schema types ───────────────────────────────────────────
 export type {
   Database,
+  ApiKey,
   // Finance
   AssetType,
   AssetTable, Asset, NewAsset, AssetUpdate,

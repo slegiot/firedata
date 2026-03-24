@@ -6,7 +6,7 @@
  * - GET /v1/news/search         — full-text search on title/summary
  */
 import type { FastifyInstance } from 'fastify';
-import type { FireDataDb } from '@firedata/shared-db';
+import type { FireDataDb, ExpressionBuilder, Database } from '@firedata/shared-db';
 
 export async function registerRoutes(
   app: FastifyInstance,
@@ -78,7 +78,7 @@ export async function registerRoutes(
     let query = db
       .selectFrom('news_articles')
       .selectAll()
-      .where((eb) =>
+      .where((eb: ExpressionBuilder<Database, 'news_articles'>) =>
         eb.or([
           eb('title', 'ilike', searchTerm),
           eb('summary', 'ilike', searchTerm),
@@ -130,7 +130,7 @@ export async function registerRoutes(
     return reply.send({
       data: {
         ...article,
-        tags: tags.map((t) => t.name),
+        tags: tags.map((t: { name: string }) => t.name),
       },
     });
   });
