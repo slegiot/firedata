@@ -1,29 +1,16 @@
-FROM node:22-alpine AS base
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
-WORKDIR /app
-
-# Install deps
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
-COPY packages/shared-types/package.json packages/shared-types/package.json
-COPY packages/shared-cache/package.json packages/shared-cache/package.json
-COPY packages/shared-db/package.json packages/shared-db/package.json
-COPY packages/shared-firecrawl-client/package.json packages/shared-firecrawl-client/package.json
-COPY services/news-service/package.json services/news-service/package.json
-RUN pnpm install --frozen-lockfile
-
-# Build
-COPY tsconfig.base.json ./
-COPY packages/shared-types packages/shared-types
-COPY packages/shared-cache packages/shared-cache
-COPY packages/shared-db packages/shared-db
-COPY packages/shared-firecrawl-client packages/shared-firecrawl-client
-COPY services/news-service services/news-service
-RUN pnpm turbo build --filter=@firedata/news-service...
-
-# Run
 FROM node:22-alpine
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 WORKDIR /app
-COPY --from=base /app /app
+
+# Copy workspace config
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json tsconfig.base.json ./
+
+# Copy all packages and this service
+COPY packages packages
+COPY services/news-service services/news-service
+
+# Install all deps
+RUN pnpm install --frozen-lockfile
+
 EXPOSE 3003
-CMD ["node", "services/news-service/dist/server.js"]
+CMD ["pnpm", "--filter", "@firedata/news-service", "exec", "tsx", "src/server.ts"]

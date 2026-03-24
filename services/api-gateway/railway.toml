@@ -1,10 +1,10 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm turbo build --filter=@firedata/api-gateway..."
+buildCommand = "pnpm install --frozen-lockfile"
 watchPatterns = ["packages/**", "services/api-gateway/**", "tsconfig.base.json"]
 
 [deploy]
-startCommand = "node services/api-gateway/dist/server.js"
+startCommand = "npx tsx services/api-gateway/src/server.ts"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"

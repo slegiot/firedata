@@ -1,10 +1,10 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm turbo build --filter=@firedata/finance-service..."
+buildCommand = "pnpm install --frozen-lockfile"
 watchPatterns = ["packages/**", "services/finance-service/**", "tsconfig.base.json"]
 
 [deploy]
-startCommand = "node services/finance-service/dist/server.js"
+startCommand = "npx tsx services/finance-service/src/server.ts"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"
