@@ -1,7 +1,7 @@
 [build]
 builder = "NIXPACKS"
 buildCommand = "pnpm install --frozen-lockfile && pnpm run build --filter dashboard"
-watchPatterns = ["apps/dashboard/**", "packages/**", "tsconfig.base.json"]
+watchPatterns = ["apps/dashboard/**", "packages/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
 startCommand = "pnpm --filter dashboard start"

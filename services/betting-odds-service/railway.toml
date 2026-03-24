@@ -1,7 +1,7 @@
 [build]
 builder = "NIXPACKS"
 buildCommand = "pnpm install --frozen-lockfile && pnpm run build --filter @firedata/betting-odds-service"
-watchPatterns = ["packages/**", "services/betting-odds-service/**", "tsconfig.base.json"]
+watchPatterns = ["packages/**", "services/betting-odds-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
 startCommand = "node services/betting-odds-service/dist/server.js"

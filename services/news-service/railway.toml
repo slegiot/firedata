@@ -1,7 +1,7 @@
 [build]
 builder = "NIXPACKS"
 buildCommand = "pnpm install --frozen-lockfile && pnpm run build --filter @firedata/news-service"
-watchPatterns = ["packages/**", "services/news-service/**", "tsconfig.base.json"]
+watchPatterns = ["packages/**", "services/news-service/**", "tsconfig.base.json", "pnpm-lock.yaml"]
 
 [deploy]
 startCommand = "node services/news-service/dist/server.js"
