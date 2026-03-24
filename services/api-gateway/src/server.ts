@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import type { HealthResponse } from '@firedata/shared-types';
 
 const SERVICE_NAME = 'api-gateway';
-const PORT = Number(process.env.API_GATEWAY_PORT) || 3000;
+const PORT = Number(process.env.PORT || process.env.API_GATEWAY_PORT) || 3000;
 const startTime = Date.now();
 
 const app = Fastify({ logger: true });

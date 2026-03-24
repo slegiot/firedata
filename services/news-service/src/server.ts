@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import type { HealthResponse } from '@firedata/shared-types';
 
 const SERVICE_NAME = 'news-service';
-const PORT = Number(process.env.NEWS_SERVICE_PORT) || 3002;
+const PORT = Number(process.env.PORT || process.env.NEWS_SERVICE_PORT) || 3003;
 const startTime = Date.now();
 
 const app = Fastify({ logger: true });

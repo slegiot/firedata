@@ -7,7 +7,7 @@ import { SourceRegistry, YahooFinanceSource, GoogleFinanceSource } from './sourc
 import { startScheduler, stopScheduler } from './worker/index.js';
 
 const SERVICE_NAME = 'finance-service';
-const PORT = Number(process.env.FINANCE_SERVICE_PORT) || 3001;
+const PORT = Number(process.env.PORT || process.env.FINANCE_SERVICE_PORT) || 3001;
 const INGESTION_INTERVAL = Number(process.env.INGESTION_INTERVAL_MS) || 300_000;
 const startTime = Date.now();
 

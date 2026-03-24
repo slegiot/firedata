@@ -6,6 +6,6 @@ watchPatterns = ["packages/**", "services/sports-service/**", "tsconfig.base.jso
 [deploy]
 startCommand = "node services/sports-service/dist/server.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
