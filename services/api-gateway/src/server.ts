@@ -57,6 +57,41 @@ async function start() {
       await rateLimitMw(request, reply);
     });
 
+    // Register Swagger (OpenAPI 3.1)
+    await app.register(import('@fastify/swagger'), {
+      openapi: {
+        openapi: '3.1.0',
+        info: {
+          title: 'FireData API',
+          description: 'Unified financial, sports, and news data provider',
+          version: '1.0.0',
+        },
+        servers: [
+          {
+            url: `http://localhost:${PORT}`,
+          },
+        ],
+        components: {
+          securitySchemes: {
+            apiKey: {
+              type: 'apiKey',
+              name: 'X-API-Key',
+              in: 'header',
+            },
+          },
+        },
+        security: [{ apiKey: [] }],
+      },
+    });
+
+    await app.register(import('@fastify/swagger-ui'), {
+      routePrefix: '/docs',
+      uiConfig: {
+        docExpansion: 'list',
+        deepLinking: false,
+      },
+    });
+
     // Mount route modules
     await registerFinanceRoutes(app, serviceUrls);
     await registerNewsRoutes(app, serviceUrls);

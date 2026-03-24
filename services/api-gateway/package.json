@@ -12,13 +12,16 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "fastify": "^5.2.1",
-    "@firedata/shared-types": "workspace:*",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@firedata/shared-cache": "workspace:*",
     "@firedata/shared-db": "workspace:*",
-    "@firedata/shared-logging": "workspace:*"
+    "@firedata/shared-logging": "workspace:*",
+    "@firedata/shared-types": "workspace:*",
+    "fastify": "^5.2.1"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^3.0.4"
