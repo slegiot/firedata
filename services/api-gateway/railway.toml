@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm install --frozen-lockfile"
+buildCommand = "pnpm install --frozen-lockfile && npx turbo build --filter=@firedata/api-gateway..."
 watchPatterns = ["packages/**", "services/api-gateway/**", "tsconfig.base.json"]
 
 [deploy]

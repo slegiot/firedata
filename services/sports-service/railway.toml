@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm install --frozen-lockfile"
+buildCommand = "pnpm install --frozen-lockfile && npx turbo build --filter=@firedata/sports-service..."
 watchPatterns = ["packages/**", "services/sports-service/**", "tsconfig.base.json"]
 
 [deploy]
