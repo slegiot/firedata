@@ -69,7 +69,9 @@ export async function runNewsIngestion(
       // Tag the article
       for (const tagName of tags) {
         const tag = await findOrCreateTag(db, tagName);
-        await tagArticle(db, article.id, tag.id);
+        if (tag) {
+          await tagArticle(db, article.id, tag.id);
+        }
       }
 
       result.inserted++;

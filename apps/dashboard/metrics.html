@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FireData Terminal | CORE_METRICS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #131313;
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 65, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .grid-bg {
+            background-image: linear-gradient(#3b4b37 1px, transparent 1px), linear-gradient(90deg, #3b4b37 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-color: #131313;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface": "#e5e2e1",
+                        "on-background": "#e5e2e1",
+                        "inverse-surface": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#00530e",
+                        "surface-tint": "#c6c6c7",
+                        "inverse-primary": "#5d5f5f",
+                        "surface-variant": "#353534",
+                        "on-error-container": "#ffdad6",
+                        "surface": "#131313",
+                        "secondary-fixed": "#72ff70",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-container": "#00ff41",
+                        "on-tertiary-fixed": "#002203",
+                        "primary": "#f9f9f9",
+                        "primary-fixed": "#e2e2e2",
+                        "outline": "#84967e",
+                        "on-surface-variant": "#b9ccb2",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container": "#201f1f",
+                        "inverse-on-surface": "#313030",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary": "#003907",
+                        "primary-container": "#dcdddd",
+                        "tertiary-fixed": "#72ff70",
+                        "surface-dim": "#131313",
+                        "surface-container-highest": "#353534",
+                        "on-primary-fixed-variant": "#454747",
+                        "surface-bright": "#3a3939",
+                        "outline-variant": "#3b4b37",
+                        "on-tertiary-fixed-variant": "#00530e",
+                        "on-secondary-container": "#007117",
+                        "on-tertiary-container": "#007117",
+                        "on-primary-fixed": "#1a1c1c",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "secondary-fixed-dim": "#00e639",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#00e639",
+                        "on-secondary-fixed": "#002203",
+                        "secondary": "#ecffe3",
+                        "secondary-container": "#13ff43",
+                        "on-secondary": "#003907",
+                        "on-primary": "#2f3131",
+                        "on-error": "#690005",
+                        "tertiary": "#ebffe2",
+                        "on-primary-container": "#5f6161",
+                        "background": "#131313"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-tertiary-container selection:text-surface overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#131313] border-b border-[#3b4b37] flex justify-between items-center w-full px-6 h-16">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-black tracking-widest text-[#f9f9f9] uppercase">METRIC_OS_v1.0</span>
+<div class="hidden md:flex items-center gap-6 ml-10">
+<a class="font-mono uppercase tracking-tighter text-sm text-[#00ff41] border-b-2 border-[#00ff41]" href="#">CORE_METRICS</a>
+<a class="font-mono uppercase tracking-tighter text-sm text-[#f9f9f9]/60 hover:bg-[#3b4b37]/30 hover:text-[#00ff41]" href="#">NETWORK_TRAFFIC</a>
+<a class="font-mono uppercase tracking-tighter text-sm text-[#f9f9f9]/60 hover:bg-[#3b4b37]/30 hover:text-[#00ff41]" href="#">LATENCY_LOGS</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-low border border-outline-variant px-4 py-1 text-xs font-mono focus:ring-0 focus:border-tertiary-container text-on-surface" placeholder="0xSEARCH_SYSTEM..." type="text"/>
+</div>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-[#00ff41] cursor-pointer hover:bg-[#3b4b37]/30 p-1">sensors</span>
+<span class="material-symbols-outlined text-[#00ff41] cursor-pointer hover:bg-[#3b4b37]/30 p-1">settings_input_component</span>
+<span class="material-symbols-outlined text-[#00ff41] cursor-pointer hover:bg-[#3b4b37]/30 p-1">terminal</span>
+</div>
+<img alt="Avatar" class="w-8 h-8 grayscale border border-outline-variant" data-alt="System administrator avatar with technical data overlay and monochrome industrial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXKXWV_ymFwLyEItsMYSWk2hNW0q8tx5InNJoSGND94FXB6iLcCtfcQttqmJL26RPbrntMuC9YhvaSC-ByOg6jUb_vXy_IubiKaVL_4RSkZSEnRT-W-WYjlJdNbwO5zNmiLWrzlpWXhACjRYoiTOYckJ8Siq3GMiYJrSNkBPER4OEE17wQHbBR4LfzYUZMI5cSIIXH6HtPHEFs4zKvpdDd0VzsQtFvXY-WRwC5YKGWiz-rG_T0AvusVusfkjqXPeeTt-LBJK5U0w"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 border-r border-[#3b4b37] bg-[#131313] z-40 hidden md:flex flex-col">
+<div class="p-6 border-b border-[#3b4b37] bg-[#1a1a1a]">
+<div class="text-[#f9f9f9] font-black font-mono tracking-tight">TERMINAL_ROOT</div>
+<div class="text-[#00ff41] text-[10px] font-mono opacity-80 flex items-center gap-2">
+<span class="w-2 h-2 bg-[#00ff41] animate-pulse"></span>
+                0x00A4_ACTIVE
+            </div>
+</div>
+<nav class="flex-1 py-4 overflow-y-auto">
+<div class="space-y-1">
+<a class="flex items-center gap-3 bg-[#3b4b37]/20 text-[#00ff41] border-l-4 border-[#00ff41] py-3 px-4 font-mono text-xs font-bold tracking-tight translate-x-1 duration-100" href="#">
+<span class="material-symbols-outlined text-sm">analytics</span> CORE_METRICS
+                </a>
+<a class="flex items-center gap-3 text-[#f9f9f9]/50 py-3 px-4 font-mono text-xs font-bold tracking-tight hover:bg-[#00ff41]/10 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-sm">lan</span> NETWORK_TRAFFIC
+                </a>
+<a class="flex items-center gap-3 text-[#f9f9f9]/50 py-3 px-4 font-mono text-xs font-bold tracking-tight hover:bg-[#00ff41]/10 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-sm">timer</span> LATENCY_LOGS
+                </a>
+<a class="flex items-center gap-3 text-[#f9f9f9]/50 py-3 px-4 font-mono text-xs font-bold tracking-tight hover:bg-[#00ff41]/10 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-sm">memory</span> NODE_HEALTH
+                </a>
+<a class="flex items-center gap-3 text-[#f9f9f9]/50 py-3 px-4 font-mono text-xs font-bold tracking-tight hover:bg-[#00ff41]/10 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-sm">shield</span> SECURITY_AUDIT
+                </a>
+<a class="flex items-center gap-3 text-[#f9f9f9]/50 py-3 px-4 font-mono text-xs font-bold tracking-tight hover:bg-[#00ff41]/10 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-sm">settings</span> SYSTEM_CONFIG
+                </a>
+</div>
+</nav>
+<div class="p-4 border-t border-[#3b4b37] space-y-2">
+<button class="w-full bg-[#f9f9f9] text-[#131313] py-2 font-mono text-xs font-black uppercase tracking-widest active:scale-95 transition-transform">
+                EXECUTE_NEW_STREAM
+            </button>
+<div class="flex justify-between pt-2">
+<a class="text-[#f9f9f9]/40 text-[10px] flex items-center gap-1 hover:text-[#00ff41]" href="#">
+<span class="material-symbols-outlined text-xs">description</span> DOCS
+                </a>
+<a class="text-[#f9f9f9]/40 text-[10px] flex items-center gap-1 hover:text-[#ffb4ab]" href="#">
+<span class="material-symbols-outlined text-xs">logout</span> LOGOUT
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-16 h-screen overflow-y-auto grid-bg relative">
+<div class="p-6 md:p-8 space-y-8 max-w-[1600px] mx-auto">
+<!-- Dashboard Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-l-4 border-[#00ff41] pl-6 py-2">
+<div>
+<h1 class="text-4xl md:text-6xl font-black font-headline text-primary tracking-tighter uppercase leading-none">CORE_METRICS</h1>
+<div class="flex items-center gap-4 mt-2 font-mono text-[10px] text-tertiary-container/80">
+<span>SYS_ID: 0xFD-8892-KINETIC</span>
+<span class="text-outline">|</span>
+<span>UPTIME: 124:14:02:55</span>
+<span class="text-outline">|</span>
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-[#00ff41] rounded-full"></span> STATUS: NOMINAL</span>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="bg-surface-container-high p-4 border border-outline-variant flex flex-col items-end min-w-[120px]">
+<span class="text-[10px] text-outline uppercase font-mono">LATENCY_MS</span>
+<span class="text-2xl font-black text-tertiary-container font-mono">14.02</span>
+</div>
+<div class="bg-surface-container-high p-4 border border-outline-variant flex flex-col items-end min-w-[120px]">
+<span class="text-[10px] text-outline uppercase font-mono">THROUGHPUT</span>
+<span class="text-2xl font-black text-primary font-mono">8.4 GB/s</span>
+</div>
+</div>
+</header>
+<!-- Real-time Performance Charts (Bento Grid Style) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- CPU Chart -->
+<div class="lg:col-span-8 bg-surface-container border border-outline-variant p-1">
+<div class="bg-surface p-6 h-[400px] relative flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-mono text-sm font-bold text-primary flex items-center gap-2 uppercase tracking-widest">
+<span class="material-symbols-outlined text-tertiary-container text-lg">monitoring</span> 
+                                    CPU_UTILIZATION_REALTIME
+                                </h3>
+<p class="text-[10px] text-outline font-mono">SAMPLING_INTERVAL: 100ms</p>
+</div>
+<div class="text-right">
+<span class="text-2xl font-black font-mono text-tertiary-container">64.8%</span>
+</div>
+</div>
+<div class="flex-1 w-full relative border-l border-b border-[#3b4b37]">
+<!-- Visual placeholder for a line graph -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 300">
+<path d="M0,250 L100,220 L200,240 L300,180 L400,210 L500,150 L600,190 L700,120 L800,140 L900,80 L1000,100 V300 H0 Z" fill="rgba(0, 255, 65, 0.05)" stroke="#00ff41" stroke-width="2"></path>
+<line stroke="#3b4b37" stroke-dasharray="4" x1="0" x2="1000" y1="200" y2="200"></line>
+<line stroke="#3b4b37" stroke-dasharray="4" x1="0" x2="1000" y1="100" y2="100"></line>
+</svg>
+<div class="absolute inset-0 flex justify-between pointer-events-none p-2">
+<div class="h-full flex flex-col justify-between text-[8px] font-mono text-outline">
+<span>100%</span>
+<span>50%</span>
+<span>0%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Resource Gauges -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Disk Usage -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col h-[188px]">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-mono text-xs font-bold text-primary uppercase">STORAGE_VOLUME_01</h3>
+<span class="text-[10px] text-tertiary-container font-mono">SSD_EXT_4</span>
+</div>
+<div class="flex-1 flex items-center gap-6">
+<div class="relative w-24 h-24">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="stroke-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="4"></path>
+<path class="stroke-tertiary-container" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="75, 100" stroke-width="4"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-mono text-lg font-bold">75%</div>
+</div>
+<div class="space-y-1 font-mono text-[10px]">
+<div class="flex justify-between gap-4"><span class="text-outline uppercase">USED:</span> <span class="text-primary">1.4 TB</span></div>
+<div class="flex justify-between gap-4"><span class="text-outline uppercase">FREE:</span> <span class="text-primary">0.6 TB</span></div>
+<div class="flex justify-between gap-4"><span class="text-outline uppercase">TEMP:</span> <span class="text-tertiary-container">34°C</span></div>
+</div>
+</div>
+</div>
+<!-- Network Monitor -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col h-[188px]">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-mono text-xs font-bold text-primary uppercase">NETWORK_LOAD</h3>
+<span class="text-[10px] text-error font-mono flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">warning</span> HIGH_TRAFFIC
+                            </span>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-[10px] font-mono mb-1">
+<span class="text-outline uppercase">INBOUND</span>
+<span class="text-tertiary-container">442 MB/s</span>
+</div>
+<div class="h-1 bg-surface-container-high w-full">
+<div class="h-full bg-tertiary-container" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-mono mb-1">
+<span class="text-outline uppercase">OUTBOUND</span>
+<span class="text-primary">128 MB/s</span>
+</div>
+<div class="h-1 bg-surface-container-high w-full">
+<div class="h-full bg-primary" style="width: 35%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- High Density Data Grid -->
+<section class="bg-surface-container border border-outline-variant overflow-hidden">
+<div class="bg-[#1a1a1a] px-6 py-3 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-mono text-xs font-black text-primary uppercase tracking-[0.2em]">ACTIVE_PROCESS_NODES</h3>
+<div class="flex items-center gap-4">
+<div class="text-[10px] font-mono text-outline">FILTER: <span class="text-tertiary-container">ALL_NODES</span></div>
+<div class="text-[10px] font-mono text-outline">NODES_ONLINE: <span class="text-tertiary-container">42/42</span></div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low font-mono text-[10px] text-outline border-b border-outline-variant">
+<th class="p-4 font-bold uppercase tracking-widest">PID_UUID</th>
+<th class="p-4 font-bold uppercase tracking-widest">PROCESS_NAME</th>
+<th class="p-4 font-bold uppercase tracking-widest">STATUS</th>
+<th class="p-4 font-bold uppercase tracking-widest">MEM_RESERVATION</th>
+<th class="p-4 font-bold uppercase tracking-widest">CPU_THREAD</th>
+<th class="p-4 font-bold uppercase tracking-widest text-right">LATENCY</th>
+</tr>
+</thead>
+<tbody class="font-mono text-xs divide-y divide-[#3b4b37]/20">
+<!-- Process Rows -->
+<tr class="hover:bg-tertiary-container/5 group cursor-pointer transition-colors">
+<td class="p-4 text-outline group-hover:text-tertiary-container">0xFD-71A2</td>
+<td class="p-4 text-primary font-bold">CORE_ENNGINE_ALPHA</td>
+<td class="p-4">
+<span class="inline-block px-2 py-0.5 bg-tertiary-container/10 text-tertiary-container text-[10px] font-bold">RUNNING</span>
+</td>
+<td class="p-4 text-outline">512 MB</td>
+<td class="p-4 text-outline">0.4%</td>
+<td class="p-4 text-right text-tertiary-container font-bold">1.2ms</td>
+</tr>
+<tr class="bg-surface_container_low/30 hover:bg-tertiary-container/5 group cursor-pointer transition-colors">
+<td class="p-4 text-outline group-hover:text-tertiary-container">0xFD-92B1</td>
+<td class="p-4 text-primary font-bold">AUTH_GATEWAY_V2</td>
+<td class="p-4">
+<span class="inline-block px-2 py-0.5 bg-tertiary-container/10 text-tertiary-container text-[10px] font-bold">RUNNING</span>
+</td>
+<td class="p-4 text-outline">1024 MB</td>
+<td class="p-4 text-outline">1.2%</td>
+<td class="p-4 text-right text-tertiary-container font-bold">4.8ms</td>
+</tr>
+<tr class="hover:bg-tertiary-container/5 group cursor-pointer transition-colors">
+<td class="p-4 text-outline group-hover:text-tertiary-container">0xFD-33X9</td>
+<td class="p-4 text-primary font-bold">DB_SYNC_PRIMARY</td>
+<td class="p-4">
+<span class="inline-block px-2 py-0.5 bg-outline-variant/20 text-outline text-[10px] font-bold">IDLE</span>
+</td>
+<td class="p-4 text-outline">256 MB</td>
+<td class="p-4 text-outline">0.1%</td>
+<td class="p-4 text-right text-primary font-bold">0.4ms</td>
+</tr>
+<tr class="bg-surface_container_low/30 hover:bg-tertiary-container/5 group cursor-pointer transition-colors">
+<td class="p-4 text-outline group-hover:text-tertiary-container">0xFD-44K2</td>
+<td class="p-4 text-primary font-bold">ASSET_LOADER_S3</td>
+<td class="p-4">
+<span class="inline-block px-2 py-0.5 bg-error/10 text-error text-[10px] font-bold">STALLED</span>
+</td>
+<td class="p-4 text-outline">2048 MB</td>
+<td class="p-4 text-outline">14.2%</td>
+<td class="p-4 text-right text-error font-bold">892ms</td>
+</tr>
+<tr class="hover:bg-tertiary-container/5 group cursor-pointer transition-colors">
+<td class="p-4 text-outline group-hover:text-tertiary-container">0xFD-12M8</td>
+<td class="p-4 text-primary font-bold">LOG_AGGR_DAEMON</td>
+<td class="p-4">
+<span class="inline-block px-2 py-0.5 bg-tertiary-container/10 text-tertiary-container text-[10px] font-bold">RUNNING</span>
+</td>
+<td class="p-4 text-outline">128 MB</td>
+<td class="p-4 text-outline">3.1%</td>
+<td class="p-4 text-right text-tertiary-container font-bold">2.1ms</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-surface-container-lowest p-4 flex justify-between border-t border-outline-variant">
+<div class="text-[10px] text-outline font-mono">SHOWING 5 OF 42 NODES</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-surface-container-high border border-outline-variant text-[10px] text-primary hover:bg-primary hover:text-surface transition-colors">PREV</button>
+<button class="px-3 py-1 bg-surface-container-high border border-outline-variant text-[10px] text-primary hover:bg-primary hover:text-surface transition-colors">NEXT</button>
+</div>
+</div>
+</section>
+<!-- System Logs Overlay -->
+<section class="bg-surface-container-lowest border border-outline-variant border-t-4 border-t-tertiary-container p-4 font-mono text-[10px]">
+<div class="flex items-center gap-2 text-tertiary-container mb-2">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="font-bold uppercase">Live System Logs</span>
+</div>
+<div class="space-y-1 h-32 overflow-hidden opacity-80">
+<div class="flex gap-4"><span class="text-outline">[14:22:01]</span> <span class="text-primary">INFO: Node 0xFD-71A2 successfully re-balanced memory load.</span></div>
+<div class="flex gap-4"><span class="text-outline">[14:22:03]</span> <span class="text-primary">WARN: Inbound traffic spike detected on port 443. Scaling gateway...</span></div>
+<div class="flex gap-4"><span class="text-outline">[14:22:05]</span> <span class="text-error">CRIT: Connection timeout on ASSET_LOADER_S3. Retrying [1/3]...</span></div>
+<div class="flex gap-4"><span class="text-outline">[14:22:08]</span> <span class="text-primary">AUTH: User root login from 192.168.1.104 confirmed.</span></div>
+<div class="flex gap-4"><span class="text-outline">[14:22:12]</span> <span class="text-tertiary-container">SYS: Routine garbage collection complete. 4.2GB reclaimed.</span></div>
+</div>
+</section>
+</div>
+</main>
+<!-- Visual Polish: CRT Overlays -->
+<div class="fixed inset-0 pointer-events-none z-[100] opacity-[0.03]">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#00ff41] to-transparent bg-[length:100%_4px]"></div>
+</div>
+</body></html>

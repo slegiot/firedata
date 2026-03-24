@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TERMINAL_OS_v1.0 | LOG_VIEWER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#b9ccb2",
+                        "background": "#131313",
+                        "outline": "#84967e",
+                        "on-secondary-fixed": "#002203",
+                        "surface-dim": "#131313",
+                        "on-tertiary-fixed": "#002203",
+                        "outline-variant": "#3b4b37",
+                        "on-background": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#353534",
+                        "surface-tint": "#c6c6c7",
+                        "primary-fixed": "#e2e2e2",
+                        "tertiary-fixed-dim": "#00e639",
+                        "surface-variant": "#353534",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed": "#72ff70",
+                        "surface-bright": "#3a3939",
+                        "surface": "#131313",
+                        "inverse-primary": "#5d5f5f",
+                        "tertiary": "#ebffe2",
+                        "primary-container": "#dcdddd",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#72ff70",
+                        "tertiary-container": "#00ff41",
+                        "on-tertiary": "#003907",
+                        "on-secondary-fixed-variant": "#00530e",
+                        "primary": "#f9f9f9",
+                        "on-primary": "#2f3131",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#00530e",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary": "#ecffe3",
+                        "on-primary-fixed-variant": "#454747",
+                        "on-primary-fixed": "#1a1c1c",
+                        "on-primary-container": "#5f6161",
+                        "secondary-container": "#13ff43",
+                        "surface-container": "#201f1f",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#007117",
+                        "on-tertiary-container": "#007117",
+                        "on-secondary": "#003907",
+                        "secondary-fixed-dim": "#00e639",
+                        "surface-container-high": "#2a2a2a"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #131313; }
+        ::-webkit-scrollbar-thumb { background: #3b4b37; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ff41; }
+        .glitch-border { border: 1px solid #3b4b37; }
+        .status-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="bg-background text-on-background font-mono selection:bg-tertiary-container selection:text-on-tertiary-container overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 h-16 border-b border-outline-variant bg-[#131313] fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black text-[#f9f9f9] tracking-widest uppercase">TERMINAL_OS_v1.0</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-mono uppercase tracking-tighter text-sm text-[#f9f9f9]/50 hover:text-[#f9f9f9] transition-colors" href="#">DASHBOARD</a>
+<a class="font-mono uppercase tracking-tighter text-sm text-[#00ff41] border-b-2 border-[#00ff41] pb-1" href="#">LOGS</a>
+<a class="font-mono uppercase tracking-tighter text-sm text-[#f9f9f9]/50 hover:text-[#f9f9f9] transition-colors" href="#">METRICS</a>
+<a class="font-mono uppercase tracking-tighter text-sm text-[#f9f9f9]/50 hover:text-[#f9f9f9] transition-colors" href="#">ALERTS</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#00ff41] hover:bg-[#00ff41]/10 p-2 transition-all active:scale-95 duration-75" data-icon="terminal">terminal</button>
+<button class="material-symbols-outlined text-[#f9f9f9]/50 hover:text-[#f9f9f9] p-2 transition-all active:scale-95 duration-75" data-icon="settings">settings</button>
+<div class="w-8 h-8 bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-xs" data-icon="person">person</span>
+</div>
+</div>
+</header>
+<div class="flex pt-16 h-screen">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full fixed left-0 w-64 border-r border-outline-variant bg-[#1a1a1a]">
+<div class="p-4 border-b border-outline-variant/30">
+<div class="flex justify-between items-center mb-1">
+<span class="font-mono text-[11px] uppercase tracking-widest text-[#00ff41]">STREAMS</span>
+<span class="text-[10px] text-on-surface-variant/50">v1.2.4</span>
+</div>
+<div class="font-mono text-[10px] uppercase tracking-widest text-[#f9f9f9]/40">ACTIVE_THREADS: 12</div>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<div class="bg-[#00ff41] text-[#131313] font-bold p-3 flex items-center gap-3 cursor-pointer group">
+<span class="material-symbols-outlined text-sm" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-mono text-[11px] uppercase tracking-widest">AUTH_STREAM</span>
+</div>
+<div class="text-[#f9f9f9]/70 p-3 border-b border-outline-variant/30 flex items-center gap-3 cursor-pointer hover:bg-outline-variant/50 transition-none hover:translate-x-1">
+<span class="material-symbols-outlined text-sm" data-icon="database">database</span>
+<span class="font-mono text-[11px] uppercase tracking-widest">DB_INSTANCE_01</span>
+</div>
+<div class="text-[#f9f9f9]/70 p-3 border-b border-outline-variant/30 flex items-center gap-3 cursor-pointer hover:bg-outline-variant/50 transition-none hover:translate-x-1">
+<span class="material-symbols-outlined text-sm" data-icon="lan">lan</span>
+<span class="font-mono text-[11px] uppercase tracking-widest">NETWORK_TRAFFIC</span>
+</div>
+<div class="text-[#f9f9f9]/70 p-3 border-b border-outline-variant/30 flex items-center gap-3 cursor-pointer hover:bg-outline-variant/50 transition-none hover:translate-x-1">
+<span class="material-symbols-outlined text-sm" data-icon="router">router</span>
+<span class="font-mono text-[11px] uppercase tracking-widest">GATEWAY_LOGS</span>
+</div>
+<div class="p-4 mt-4">
+<button class="w-full border border-outline-variant py-2 px-3 text-[11px] text-[#f9f9f9] hover:bg-[#00ff41]/5 transition-all text-left flex justify-between items-center">
+                        NEW_FILTER
+                        <span class="material-symbols-outlined text-xs" data-icon="add">add</span>
+</button>
+</div>
+</nav>
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant">
+<div class="space-y-3">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[9px] uppercase tracking-tighter text-on-surface-variant">CPU_LOAD</div>
+<div class="h-1 w-full bg-outline-variant/20">
+<div class="h-full bg-[#00ff41] w-[42%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-[9px] uppercase tracking-tighter text-on-surface-variant">MEM_ALLOC</div>
+<div class="h-1 w-full bg-outline-variant/20">
+<div class="h-full bg-[#00ff41] w-[78%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 space-y-2">
+<div class="flex items-center gap-2 text-[#f9f9f9]/50 hover:text-[#00ff41] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-sm" data-icon="memory">memory</span>
+<span class="font-mono text-[10px] uppercase tracking-widest">SYSTEM_STATUS</span>
+</div>
+<div class="flex items-center gap-2 text-[#f9f9f9]/50 hover:text-[#f9f9f9] cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+<span class="font-mono text-[10px] uppercase tracking-widest">HELP</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex flex-1 h-full bg-surface-container-lowest overflow-hidden">
+<!-- Terminal Section -->
+<section class="flex-1 flex flex-col min-w-0 bg-[#131313]">
+<!-- Log Controls -->
+<div class="h-12 border-b border-outline-variant flex items-center px-4 justify-between bg-surface">
+<div class="flex items-center gap-4">
+<div class="flex items-center border border-outline-variant px-2 bg-surface-container-low focus-within:border-tertiary-container transition-colors">
+<span class="material-symbols-outlined text-sm text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-[11px] font-mono text-on-surface w-48 placeholder:text-on-surface-variant/30 uppercase" placeholder="FILTER_LOGS..." type="text"/>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant/30 mx-2"></div>
+<div class="flex gap-1">
+<button class="px-2 py-1 text-[10px] border border-outline-variant hover:bg-outline-variant/20 text-[#00ff41] font-bold">INFO</button>
+<button class="px-2 py-1 text-[10px] border border-outline-variant hover:bg-outline-variant/20 text-on-surface-variant/50">WARN</button>
+<button class="px-2 py-1 text-[10px] border border-outline-variant hover:bg-outline-variant/20 text-on-surface-variant/50">ERROR</button>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-3 py-1 text-[10px] border border-outline-variant hover:bg-outline-variant/20 transition-all uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="pause">pause</span> PAUSE
+                        </button>
+<button class="flex items-center gap-1 px-3 py-1 text-[10px] border border-outline-variant hover:bg-outline-variant/20 transition-all uppercase">
+<span class="material-symbols-outlined text-xs" data-icon="delete_sweep">delete_sweep</span> CLEAR
+                        </button>
+<button class="flex items-center gap-1 px-3 py-1 text-[10px] bg-primary text-background hover:invert transition-all uppercase font-bold">
+<span class="material-symbols-outlined text-xs" data-icon="download">download</span> EXPORT
+                        </button>
+</div>
+</div>
+<!-- Log Stream -->
+<div class="flex-1 overflow-y-auto p-4 space-y-1 font-mono text-[12px] leading-tight selection:bg-[#00ff41] selection:text-[#131313]">
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:12]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Incoming connection from gateway_node_04 (IP: 192.168.1.104)</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:12]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Authentication handshake initialized: SHA-256 validation pending...</span>
+</div>
+<div class="flex gap-4 p-1 bg-surface-container-high border-l-2 border-[#00ff41] cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:13]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-primary truncate">User "SYS_ADMIN_B" authenticated successfully via RSA_TOKEN_4.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:15]</span>
+<span class="text-[#ffcc00] font-bold shrink-0">WARN</span>
+<span class="text-on-surface truncate">Latency spike detected in stream node "US-EAST-01". current_delay: 142ms</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:18]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Stream buffer optimized. Reclaiming 240MB idle memory.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:22]</span>
+<span class="text-error font-bold shrink-0">ERRO</span>
+<span class="text-error truncate">Connection terminated: SOCKET_ERROR_0x04. Stream "GATEWAY_LOGS" disconnected.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:23]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Auto-restart protocol engaged for thread ID: 0xFF021.</span>
+</div>
+<!-- Repeating mock data for density -->
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:25]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Heartbeat received from DB_INSTANCE_01. Health: 100%.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:28]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">System update check: All components synchronized to version 2.4.0.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:30]</span>
+<span class="text-[#ffcc00] font-bold shrink-0">WARN</span>
+<span class="text-on-surface truncate">Unauthorized access attempt detected at ENDPOINT: /v1/admin/purge</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:32]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Firewall policy updated: blocked 1 suspect source IP.</span>
+</div>
+<div class="flex gap-4 p-1 hover:bg-surface-container-low cursor-pointer group transition-colors">
+<span class="text-on-surface-variant/40 shrink-0">[14:45:35]</span>
+<span class="text-tertiary-container font-bold shrink-0">INFO</span>
+<span class="text-on-surface truncate">Telemetry data pushed to central_store. Latency: 4ms.</span>
+</div>
+</div>
+<!-- Footer Status Bar -->
+<div class="h-8 bg-surface-container-low border-t border-outline-variant flex items-center px-4 justify-between text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 bg-[#00ff41] status-pulse"></span>
+<span>LIVE_CONNECTION: ESTABLISHED</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<span>EVENT_RATE: 2.4/S</span>
+</div>
+<div class="flex items-center gap-4">
+<span>REGION: US-EAST-1</span>
+<span>ENC: AES-256-GCM</span>
+</div>
+</div>
+</section>
+<!-- Detailed Log Panel (Right) -->
+<aside class="w-96 border-l border-outline-variant bg-[#1a1a1a] flex flex-col">
+<div class="p-4 border-b border-outline-variant bg-surface">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-headline font-bold text-sm tracking-widest uppercase text-primary">Entry Details</h2>
+<button class="material-symbols-outlined text-sm hover:text-white" data-icon="close">close</button>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="bg-surface-container-lowest p-2 border border-outline-variant/30">
+<div class="text-[9px] text-on-surface-variant uppercase">Log_ID</div>
+<div class="text-[11px] text-[#00ff41]">#0x2849F-2</div>
+</div>
+<div class="bg-surface-container-lowest p-2 border border-outline-variant/30">
+<div class="text-[9px] text-on-surface-variant uppercase">Priority</div>
+<div class="text-[11px] text-[#00ff41]">NORMAL</div>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<div>
+<div class="text-[10px] text-on-surface-variant uppercase mb-2 font-bold tracking-widest">Metadata</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[11px] border-b border-outline-variant/10 py-1">
+<span class="text-on-surface-variant/50">TIMESTAMP:</span>
+<span>2023-10-27T14:45:13.442Z</span>
+</div>
+<div class="flex justify-between text-[11px] border-b border-outline-variant/10 py-1">
+<span class="text-on-surface-variant/50">SOURCE:</span>
+<span>AUTH_NODE_07</span>
+</div>
+<div class="flex justify-between text-[11px] border-b border-outline-variant/10 py-1">
+<span class="text-on-surface-variant/50">LEVEL:</span>
+<span class="text-tertiary-container">INFO</span>
+</div>
+<div class="flex justify-between text-[11px] border-b border-outline-variant/10 py-1">
+<span class="text-on-surface-variant/50">PROTOCOL:</span>
+<span>HTTP/2.0</span>
+</div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<div class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">RAW_JSON_PAYLOAD</div>
+<span class="material-symbols-outlined text-xs cursor-pointer hover:text-[#00ff41]" data-icon="content_copy">content_copy</span>
+</div>
+<div class="bg-surface-container-lowest p-3 font-mono text-[10px] text-on-surface leading-relaxed border border-outline-variant/30 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-8 h-full bg-gradient-to-l from-black/20 to-transparent pointer-events-none"></div>
+<pre class="text-[#00ff41]/80">{
+  "event": "AUTH_SUCCESS",
+  "actor": {
+    "id": "USR-9921",
+    "role": "SYS_ADMIN",
+    "perm_mask": "0xFFFF"
+  },
+  "context": {
+    "request_id": "REQ-002-88",
+    "latency_ms": 12,
+    "geo": "US-WEST"
+  },
+  "security": {
+    "method": "RSA_TOKEN_4",
+    "verified": true,
+    "integrity_hash": "a4f2e9..."
+  }
+}
+</pre>
+</div>
+</div>
+<div class="p-4 border border-outline-variant/30 bg-surface-container-low">
+<div class="text-[10px] text-on-surface-variant uppercase mb-2 font-bold tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[10px]" data-icon="info">info</span> Quick_Action
+                        </div>
+<div class="grid grid-cols-2 gap-2">
+<button class="text-[9px] border border-outline-variant p-2 hover:bg-[#00ff41]/10 text-primary uppercase text-center">Trace Request</button>
+<button class="text-[9px] border border-outline-variant p-2 hover:bg-[#00ff41]/10 text-primary uppercase text-center">Block Actor</button>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+<!-- Background Glitch Accents -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none opacity-[0.03] z-[-1]" style="background-image: radial-gradient(#00ff41 1px, transparent 1px); background-size: 20px 20px;">
+</div>
+</body></html>

@@ -1,0 +1,77 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "surface-container-high": "#2a2a2a",
+        "on-secondary-fixed-variant": "#00530e",
+        "surface-bright": "#3a3939",
+        "on-primary": "#2f3131",
+        "primary-fixed-dim": "#c6c6c7",
+        "on-secondary": "#003907",
+        "inverse-surface": "#e5e2e1",
+        "secondary-container": "#13ff43",
+        "secondary-fixed": "#72ff70",
+        "primary-container": "#dcdddd",
+        "secondary-fixed-dim": "#00e639",
+        "on-tertiary": "#003907",
+        "inverse-on-surface": "#313030",
+        "error-container": "#93000a",
+        "on-primary-container": "#5f6161",
+        "surface-tint": "#c6c6c7",
+        "surface-container-low": "#1c1b1b",
+        "on-tertiary-fixed-variant": "#00530e",
+        "on-primary-fixed": "#1a1c1c",
+        "primary-fixed": "#e2e2e2",
+        "inverse-primary": "#5d5f5f",
+        "primary": "#f9f9f9",
+        "on-primary-fixed-variant": "#454747",
+        "surface-container-lowest": "#0e0e0e",
+        "on-tertiary-fixed": "#002203",
+        "background": "#131313",
+        "outline": "#84967e",
+        "surface-dim": "#131313",
+        "on-surface-variant": "#b9ccb2",
+        "error": "#ffb4ab",
+        "tertiary-fixed-dim": "#00e639",
+        "on-error-container": "#ffdad6",
+        "tertiary-fixed": "#72ff70",
+        "on-secondary-container": "#007117",
+        "secondary": "#ecffe3",
+        "on-secondary-fixed": "#002203",
+        "surface-container": "#201f1f",
+        "surface-variant": "#353534",
+        "on-surface": "#e5e2e1",
+        "surface-container-highest": "#353534",
+        "on-error": "#690005",
+        "outline-variant": "#3b4b37",
+        "on-tertiary-container": "#007117",
+        "surface": "#131313",
+        "tertiary": "#ebffe2",
+        "tertiary-container": "#00ff41",
+        "on-background": "#e5e2e1"
+      },
+      fontFamily: {
+        "headline": ["Space Grotesk", "sans-serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["JetBrains Mono", "monospace"],
+        "mono": ["JetBrains Mono", "monospace"]
+      },
+      borderRadius: {
+        "DEFAULT": "0px",
+        "lg": "0px",
+        "xl": "0px",
+        "full": "0px"
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries')
+  ],
+}
