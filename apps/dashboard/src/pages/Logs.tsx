@@ -1,6 +1,14 @@
 
+import { useQuery } from '@tanstack/react-query';
+import { fetchLogs } from '../utils/mockApi';
 
 export const Logs = () => {
+  const { data: logs = [] } = useQuery({
+    queryKey: ['liveLogs'],
+    queryFn: fetchLogs,
+    refetchInterval: 1000,
+  });
+
   return (
     <div className="flex pt-16 h-screen w-full bg-surface-container-lowest overflow-hidden">
       {/* SideNavBar */}
@@ -97,41 +105,13 @@ export const Logs = () => {
           
           {/* Log Stream */}
           <div className="flex-1 overflow-y-auto p-4 space-y-1 font-mono text-[12px] leading-tight selection:bg-[#00ff41] selection:text-[#131313]">
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:12]</span>
-              <span className="text-[#00ff41] font-bold shrink-0">INFO</span>
-              <span className="text-[#e5e2e1] truncate">Incoming connection from gateway_node_04 (IP: 192.168.1.104)</span>
-            </div>
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:12]</span>
-              <span className="text-[#00ff41] font-bold shrink-0">INFO</span>
-              <span className="text-[#e5e2e1] truncate">Authentication handshake initialized: SHA-256 validation pending...</span>
-            </div>
-            <div className="flex gap-4 p-1 bg-[#2a2a2a] border-l-2 border-[#00ff41] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:13]</span>
-              <span className="text-[#00ff41] font-bold shrink-0">INFO</span>
-              <span className="text-[#f9f9f9] truncate">User "SYS_ADMIN_B" authenticated successfully via RSA_TOKEN_4.</span>
-            </div>
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:15]</span>
-              <span className="text-[#ffcc00] font-bold shrink-0">WARN</span>
-              <span className="text-[#e5e2e1] truncate">Latency spike detected in stream node "US-EAST-01". current_delay: 142ms</span>
-            </div>
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:18]</span>
-              <span className="text-[#00ff41] font-bold shrink-0">INFO</span>
-              <span className="text-[#e5e2e1] truncate">Stream buffer optimized. Reclaiming 240MB idle memory.</span>
-            </div>
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:22]</span>
-              <span className="text-[#ffb4ab] font-bold shrink-0">ERRO</span>
-              <span className="text-[#ffb4ab] truncate">Connection terminated: SOCKET_ERROR_0x04. Stream "GATEWAY_LOGS" disconnected.</span>
-            </div>
-            <div className="flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors">
-              <span className="text-[#b9ccb2]/40 shrink-0">[14:45:23]</span>
-              <span className="text-[#00ff41] font-bold shrink-0">INFO</span>
-              <span className="text-[#e5e2e1] truncate">Auto-restart protocol engaged for thread ID: 0xFF021.</span>
-            </div>
+            {logs.map((log) => (
+              <div key={log.id} className={`flex gap-4 p-1 hover:bg-[#1c1b1b] cursor-pointer group transition-colors ${log.level === 'INFO' ? 'border-l-2 border-transparent hover:border-[#00ff41]' : ''}`}>
+                <span className="text-[#b9ccb2]/40 shrink-0">[{new Date(log.timestamp).toLocaleTimeString()}]</span>
+                <span className={`font-bold shrink-0 ${log.level === 'INFO' ? 'text-[#00ff41]' : log.level === 'WARN' ? 'text-[#ffcc00]' : 'text-[#ffb4ab]'}`}>{log.level}</span>
+                <span className={`truncate ${log.level === 'ERRO' ? 'text-[#ffb4ab]' : 'text-[#e5e2e1]'}`}>{log.message}</span>
+              </div>
+            ))}
           </div>
           
           {/* Footer Status Bar */}

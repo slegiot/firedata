@@ -1,6 +1,14 @@
 
+import { useQuery } from '@tanstack/react-query';
+import { fetchMetrics } from '../utils/mockApi';
 
 export const Metrics = () => {
+  const { data: metrics } = useQuery({
+    queryKey: ['systemMetrics'],
+    queryFn: fetchMetrics,
+    refetchInterval: 1000,
+  });
+
   return (
     <div className="flex pt-16 h-screen w-full bg-[#131313] overflow-hidden">
       {/* SideNavBar */}
@@ -67,11 +75,11 @@ export const Metrics = () => {
             <div className="flex gap-2">
               <div className="bg-[#2a2a2a] p-4 border border-[#3b4b37] flex flex-col items-end min-w-[120px]">
                 <span className="text-[10px] text-[#84967e] uppercase font-mono">LATENCY_MS</span>
-                <span className="text-2xl font-black text-[#00ff41] font-mono">14.02</span>
+                <span className="text-2xl font-black text-[#00ff41] font-mono">{metrics?.latencyMs.toFixed(2) ?? '14.02'}</span>
               </div>
               <div className="bg-[#2a2a2a] p-4 border border-[#3b4b37] flex flex-col items-end min-w-[120px]">
                 <span className="text-[10px] text-[#84967e] uppercase font-mono">THROUGHPUT</span>
-                <span className="text-2xl font-black text-[#f9f9f9] font-mono">8.4 GB/s</span>
+                <span className="text-2xl font-black text-[#f9f9f9] font-mono">{metrics?.throughputGBs.toFixed(1) ?? '8.4'} GB/s</span>
               </div>
             </div>
           </header>
@@ -90,7 +98,7 @@ export const Metrics = () => {
                     <p className="text-[10px] text-[#84967e] font-mono">SAMPLING_INTERVAL: 100ms</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-black font-mono text-[#00ff41]">64.8%</span>
+                    <span className="text-2xl font-black font-mono text-[#00ff41]">{metrics?.cpuUtilization.toFixed(1) ?? '64.8'}%</span>
                   </div>
                 </div>
                 <div className="flex-1 w-full relative border-l border-b border-[#3b4b37]">
@@ -122,13 +130,13 @@ export const Metrics = () => {
                   <div className="relative w-24 h-24">
                     <svg className="w-full h-full" viewBox="0 0 36 36">
                       <path className="stroke-[#2a2a2a]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeWidth="4"></path>
-                      <path className="stroke-[#00ff41]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeDasharray="75, 100" strokeWidth="4"></path>
+                      <path className="stroke-[#00ff41]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeDasharray={`${Math.round(((metrics?.memoryUsedTB || 1.4) / (metrics?.memoryTotalTB || 2.0)) * 100)}, 100`} strokeWidth="4"></path>
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center font-mono text-lg font-bold text-[#e5e2e1]">75%</div>
+                    <div className="absolute inset-0 flex items-center justify-center font-mono text-lg font-bold text-[#e5e2e1]">{Math.round(((metrics?.memoryUsedTB || 1.4) / (metrics?.memoryTotalTB || 2.0)) * 100)}%</div>
                   </div>
                   <div className="space-y-1 font-mono text-[10px]">
-                    <div className="flex justify-between gap-4"><span className="text-[#84967e] uppercase">USED:</span> <span className="text-[#f9f9f9]">1.4 TB</span></div>
-                    <div className="flex justify-between gap-4"><span className="text-[#84967e] uppercase">FREE:</span> <span className="text-[#f9f9f9]">0.6 TB</span></div>
+                    <div className="flex justify-between gap-4"><span className="text-[#84967e] uppercase">USED:</span> <span className="text-[#f9f9f9]">{metrics?.memoryUsedTB.toFixed(1) ?? '1.4'} TB</span></div>
+                    <div className="flex justify-between gap-4"><span className="text-[#84967e] uppercase">FREE:</span> <span className="text-[#f9f9f9]">{((metrics?.memoryTotalTB || 2.0) - (metrics?.memoryUsedTB || 1.4)).toFixed(1)} TB</span></div>
                     <div className="flex justify-between gap-4"><span className="text-[#84967e] uppercase">TEMP:</span> <span className="text-[#00ff41]">34°C</span></div>
                   </div>
                 </div>
@@ -146,7 +154,7 @@ export const Metrics = () => {
                   <div>
                     <div className="flex justify-between text-[10px] font-mono mb-1">
                       <span className="text-[#84967e] uppercase">INBOUND</span>
-                      <span className="text-[#00ff41]">442 MB/s</span>
+                      <span className="text-[#00ff41]">{metrics?.networkInboundMBs.toFixed(0) ?? '442'} MB/s</span>
                     </div>
                     <div className="h-1 bg-[#2a2a2a] w-full">
                       <div className="h-full bg-[#00ff41]" style={{ width: '82%' }}></div>
@@ -155,7 +163,7 @@ export const Metrics = () => {
                   <div>
                     <div className="flex justify-between text-[10px] font-mono mb-1">
                       <span className="text-[#84967e] uppercase">OUTBOUND</span>
-                      <span className="text-[#f9f9f9]">128 MB/s</span>
+                      <span className="text-[#f9f9f9]">{metrics?.networkOutboundMBs.toFixed(0) ?? '128'} MB/s</span>
                     </div>
                     <div className="h-1 bg-[#2a2a2a] w-full">
                       <div className="h-full bg-[#f9f9f9]" style={{ width: '35%' }}></div>
