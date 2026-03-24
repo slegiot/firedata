@@ -1,6 +1,6 @@
 {
   "name": "@firedata/shared-db",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -8,15 +8,16 @@
     "build": "tsc --build",
     "dev": "tsc --build --watch",
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
-    "pg": "^8.13.1",
-    "drizzle-orm": "^0.38.3"
+    "kysely": "^0.27.5",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.30.1",
+    "tsx": "^4.19.0",
     "typescript": "^5.7.2"
   }
 }
